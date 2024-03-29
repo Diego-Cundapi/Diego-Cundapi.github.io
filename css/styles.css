@@ -1,0 +1,41 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html{
+    font-size: 62.5%;
+}
+
+body{
+    background-color: aqua;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2rem;
+}
+
+#cabecera{
+    background-color: rgba(75, 15, 255, 0.893);
+    height: 7vh;
+    width: 100%;
+    font-size: 1em;
+    color: white;
+}
+
+.cabecera-nav{
+    position: absolute;
+}
+
+.cabecera-nav-ul{
+    list-style: none;
+    position: relative;
+}
+
+.cabecera-nav-ul-a{
+    color: white;
+    display: inline-block;
+    margin: 5px;
+    padding: 5px;
+    text-decoration: none; /* le quito las decoraciones a la ancla */
+    
+}
