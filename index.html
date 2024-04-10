@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,54 +23,114 @@
             text-align: center;
         }
 
-        #cabecera{
-            background-color: rgba(75, 15, 255, 0.893);
-            height: 7vh;
-            width: 100%;
-            font-size: 1em;
-            color: white;
+        header{
+            background-color: black;
+            font-size: 1.4em;
+            padding-right: 1em;
         }
 
-        .cabecera-nav{
-            position: absolute;
+        .header-nav{
+            display: flex;
+            justify-content: space-between;
         }
 
-        .cabecera-nav-ul{
-            list-style: none;
-            position: relative;
-        }
-
-        .cabecera-nav-ul-a{
+        .header-div-nombre{
             color: white;
             display: inline-block;
-            margin: 5px;
-            padding: 5px;
-            text-decoration: none; /* le quito las decoraciones a la ancla */
+            justify-content: start;
+        }
+
+        .header-div-ul{
+            display: inline-block;
+            justify-content: end;
+            color: white;
+        }
+
+        .cabecera-nav-ul a{
+            text-decoration: none;
+        }
+
+        .cabecera-nav-ul-ancla:link{ /* pseudo-elemento que sirve para indicarle al usuario que no ha visitado este link */
+            color: white;
+        }
+
+        .cabecera-nav-ul-ancla:visited{ /* pseudo-elemento que sirve para indicarle al usuario que ya ha visitado este link */
+            color: gray;
+        }
+
+        .cabecera-nav-ul-ancla:hover{ /* pseudo-elemento que cambia el color del texto cuando el usuario pone encima el mouse */
+            color: blue;
+        }
+
+        main h1, .contenido{
+            padding: 0em 4em;
+        }
+
+
+        @media screen and (max-width:583px){
+            header{
+                font-size: 1.2em;
+            }
+            main h1{
+                font-size: 1em;
+            }
+
+            .contenido{
+                font-size: 0.6em;
+            }
+
+            .contenido img{
+                width: 300px;
+            }
+
+        }
+        @media screen and (max-width:490px){
+            header{
+                font-size: 0.8em;
+            }
+            main h1{
+                font-size: 1em;
+            }
+
+            .contenido{
+                font-size: 0.6em;
+            }
+
+            .contenido img{
+                width: 300px;
+            }
+
         }
     </style>
 </head>
 <body>
-    <header id="cabecera">
-        <nav class="cabecera-nav">
-            <ul class="cabecera-nav-ul">
-                <span>Diego Ivan Cundap&iacute; Le&oacute;n</span>
-                <a  class="cabecera-nav-ul-a" href="">Inicio</a>
-                <a class="cabecera-nav-ul-a"  href="">Repositorios</a>
-                <a class="cabecera-nav-ul-a"  href="">LinkedIn</a>
-            </ul>
-        </nav>
+    <header>
+        <nav class="header-nav">
+            <div class = "header-div-nombre">
+                <p>Diego Ivan Cundap&iacute; Le&oacute;n</p>
+            </div>
+    
+            <div class = "header-div-ul">
+                <ul class="cabecera-nav-ul">
+                    <a class="cabecera-nav-ul-ancla" href="">Inicio</a>
+                    <a class="cabecera-nav-ul-ancla" href="https://github.com/Diego-Cundapi" target="_blank">Repositorios</a>
+                    <a class="cabecera-nav-ul-ancla" href="https://www.linkedin.com/in/diego-ivan-cundap%C3%AD-le%C3%B3n-167a1328a/" target="_blank">LinkedIn</a>
+                </ul>
+            </div>
     </header>
 
     <main>
-
+        <h1>Este es un sitio web con GitHub Pages</h1>
+        <div class="contenido">
+            <p>Y fue creado con amor para el curso de git y GitHub de Platzi</p>
+            <p><img src="https://i.pinimg.com/originals/5c/c8/4c/5cc84c0a769351cb839ab780028b29b9.gif"/></p>
+        </div>
+        
     </main>
 
     <footer>
 
     </footer>
-    <h1>Este es un sitio web con GitHub Pages</h1>
-    <p>Y fue creado con amor para el curso de git y GitHub de Platzi</p>
-    <p><img src="https://i.pinimg.com/originals/5c/c8/4c/5cc84c0a769351cb839ab780028b29b9.gif"/></p>
 
 </body>
 </html>
