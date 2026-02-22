@@ -59,6 +59,24 @@
             overflow-x: hidden;
         }
 
+        /* ===== CUSTOM SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 1rem;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--neon-green);
+            border-radius: 5rem;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-green-dark);
+        }
+
         body {
             background: var(--bg-primary);
             color: var(--text-primary);
