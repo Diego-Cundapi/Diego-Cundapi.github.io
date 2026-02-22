@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MADAX POS System | Diego Cundapí</title>
+    <meta name="description"
+        content="Point of Sale system developed for Refaccionaria MADAX using PHP, Laravel, SQLite, and NativePHP.">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Font-Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --neon-green: #39ff14;
+            --neon-green-dark: #2bcc10;
+            --neon-green-glow: rgba(57, 255, 20, 0.3);
+            --neon-green-subtle: rgba(57, 255, 20, 0.1);
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-card: #1a1a1a;
+            --bg-card-hover: #222222;
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --text-muted: #888888;
+            --border-color: #333333;
+            --transition: 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        html {
+            font-size: 62.5%;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        /* ===== BACK BUTTON ===== */
+        .back-nav {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            z-index: 1000;
+        }
+
+        .back-nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(10px);
+            border: 0.1rem solid var(--border-color);
+            border-radius: 5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 1.4rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .back-nav a:hover {
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+            box-shadow: 0 0 15px var(--neon-green-glow);
+        }
+
+        /* ===== HERO ===== */
+        .project-hero {
+            position: relative;
+            height: 50vh;
+            min-height: 40rem;
+            display: flex;
+            align-items: flex-end;
+            overflow: hidden;
+        }
+
+        .project-hero img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.3);
+        }
+
+        .project-hero .hero-content {
+            position: relative;
+            z-index: 1;
+            padding: 4rem 8%;
+            width: 100%;
+            background: linear-gradient(transparent, rgba(10, 10, 10, 0.95));
+        }
+
+        .project-hero .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: rgba(57, 255, 20, 0.15);
+            border: 0.1rem solid var(--neon-green-glow);
+            color: var(--neon-green);
+            padding: 0.5rem 1.5rem;
+            border-radius: 5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-hero h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .project-hero h1 span {
+            color: var(--neon-green);
+        }
+
+        .project-hero .subtitle {
+            font-size: 1.6rem;
+            color: var(--text-secondary);
+            max-width: 60rem;
+        }
+
+        .project-hero .hero-actions {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .project-hero .hero-actions a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1.2rem 3rem;
+            border-radius: 0.8rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .project-hero .hero-actions .btn-primary {
+            background: var(--neon-green);
+            color: var(--bg-primary);
+        }
+
+        .project-hero .hero-actions .btn-primary:hover {
+            box-shadow: 0 0 20px var(--neon-green-glow);
+            transform: translateY(-0.2rem);
+        }
+
+        .project-hero .hero-actions .btn-outline {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 0.2rem solid var(--border-color);
+        }
+
+        .project-hero .hero-actions .btn-outline:hover {
+            border-color: var(--text-primary);
+            color: var(--text-primary);
+            transform: translateY(-0.2rem);
+        }
+
+        /* ===== CONTENT SECTIONS ===== */
+        .project-content {
+            padding: 6rem 8%;
+            max-width: 120rem;
+            margin: 0 auto;
+        }
+
+        .section-block {
+            margin-bottom: 6rem;
+        }
+
+        .section-block h2 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+
+        .section-block h2 span {
+            color: var(--neon-green);
+        }
+
+        /* ===== OVERVIEW ===== */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .overview-text {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .overview-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        .project-meta {
+            background: var(--bg-card);
+            border: 0.1rem solid var(--border-color);
+            border-radius: 1.5rem;
+            padding: 3rem;
+        }
+
+        .project-meta h3 {
+            font-size: 1.8rem;
+            color: var(--neon-green);
+            margin-bottom: 2rem;
+        }
+
+        .project-meta .meta-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 0;
+            border-bottom: 0.1rem solid var(--border-color);
+            font-size: 1.3rem;
+        }
+
+        .project-meta .meta-item:last-child {
+            border-bottom: none;
+        }
+
+        .project-meta .meta-item .label {
+            color: var(--text-muted);
+        }
+
+        .project-meta .meta-item .value {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* ===== TECH STACK ===== */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+            gap: 2rem;
+        }
+
+        .tech-card {
+            background: var(--bg-card);
+            border: 0.1rem solid var(--border-color);
+            border-radius: 1.2rem;
+            padding: 2.5rem;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .tech-card:hover {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 20px var(--neon-green-glow);
+            transform: translateY(-0.3rem);
+        }
+
+        .tech-card i {
+            font-size: 3.5rem;
+            color: var(--neon-green);
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-card h4 {
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-card p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        /* ===== FEATURES ===== */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 0.1rem solid var(--border-color);
+            border-radius: 1.2rem;
+            padding: 2.5rem;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            border-color: var(--neon-green);
+            transform: translateY(-0.3rem);
+        }
+
+        .feature-card .icon {
+            width: 5rem;
+            height: 5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--neon-green-subtle);
+            border-radius: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card .icon i {
+            font-size: 2rem;
+            color: var(--neon-green);
+        }
+
+        .feature-card h4 {
+            font-size: 1.6rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .feature-card p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* ===== SCREENSHOTS ===== */
+        .screenshots-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .screenshot-item {
+            border-radius: 1.2rem;
+            overflow: hidden;
+            border: 0.1rem solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .screenshot-item:hover {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 20px var(--neon-green-glow);
+        }
+
+        .screenshot-item img {
+            width: 100%;
+            height: 25rem;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            cursor: pointer;
+        }
+
+        .screenshot-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .screenshot-item .caption {
+            padding: 1.5rem 2rem;
+            background: var(--bg-card);
+            font-size: 1.3rem;
+            color: var(--text-muted);
+        }
+
+        /* ===== CTA ===== */
+        .cta-section {
+            text-align: center;
+            padding: 6rem 0;
+            border-top: 0.1rem solid var(--border-color);
+        }
+
+        .cta-section h2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+        }
+
+        .cta-section .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1.5rem 4rem;
+            background: var(--neon-green);
+            color: var(--bg-primary);
+            text-decoration: none;
+            border-radius: 0.8rem;
+            font-size: 1.6rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .cta-section .btn:hover {
+            box-shadow: 0 0 25px var(--neon-green-glow);
+            transform: translateY(-0.3rem);
+        }
+
+        /* ===== LIGHTBOX ===== */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border: 0.2rem solid var(--neon-green);
+            border-radius: 1rem;
+            box-shadow: 0 0 30px var(--neon-green-glow);
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .lightbox.active img {
+            transform: scale(1);
+        }
+
+        .lightbox .close-lightbox {
+            position: absolute;
+            top: 3rem;
+            right: 4rem;
+            font-size: 5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            line-height: 1;
+        }
+
+        .lightbox .close-lightbox:hover {
+            color: var(--neon-green);
+            transform: scale(1.1) rotate(90deg);
+            text-shadow: 0 0 10px var(--neon-green-glow);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media screen and (max-width: 992px) {
+            html {
+                font-size: 55%;
+            }
+
+            .overview-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .project-hero h1 {
+                font-size: 3.5rem;
+            }
+
+            .project-hero .hero-actions {
+                flex-direction: column;
+            }
+        }
+
+        @media screen and (max-width: 576px) {
+            html {
+                font-size: 50%;
+            }
+
+            .project-hero {
+                min-height: 35rem;
+            }
+
+            .project-hero h1 {
+                font-size: 2.8rem;
+            }
+
+            .project-content {
+                padding: 4rem 5%;
+            }
+
+            .screenshots-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tech-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .back-nav a {
+                padding: 0.8rem 1.5rem;
+                font-size: 1.2rem;
+            }
+        }
+
+        /* ===== ANIMATIONS ===== */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(3rem);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox" id="lightbox">
+        <span class="close-lightbox" id="close-lightbox">&times;</span>
+        <img src="" alt="Fullscreen image" id="lightbox-img">
+    </div>
+
+    <!-- Back Navigation -->
+    <div class="back-nav">
+        <a href="../index.html#portfolio">
+            <i class="fas fa-arrow-left"></i> Back to Portfolio
+        </a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="project-hero">
+        <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&h=600&fit=crop"
+            alt="MADAX POS System">
+        <div class="hero-content">
+            <span class="badge"><i class="fas fa-briefcase"></i> Real Business Implementation</span>
+            <h1>MADAX <span>POS</span> System</h1>
+            <p class="subtitle">A complete Point of Sale solution developed and deployed for Refaccionaria MADAX, an
+                auto parts store. Managing inventory, sales, and business operations in real-time.</p>
+            <div class="hero-actions">
+                <a href="https://github.com/Diego-Cundapi/POS-MADAX" target="_blank" rel="noopener noreferrer"
+                    class="btn-outline">
+                    <i class="fab fa-github"></i> View on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Content -->
+    <div class="project-content">
+
+        <!-- Overview -->
+        <div class="section-block fade-up">
+            <h2>Project <span>Overview</span></h2>
+            <div class="overview-grid">
+                <div class="overview-text">
+                    <p>MADAX POS is a full-featured Point of Sale system built from the ground up for Refaccionaria
+                        MADAX, a real auto parts store. The system was designed to replace manual processes with a
+                        digital solution that handles inventory management, sales transactions, and business
+                        reporting.</p>
+                    <p>Built with Laravel as the backend framework and packaged as a desktop application using
+                        NativePHP, the system provides a seamless experience for store employees. The application
+                        features role-based access control to ensure that each user only has access to the
+                        functionalities relevant to their position.</p>
+                    <p>The system processes real transactions daily, demonstrating its reliability and stability in a
+                        production environment. It has significantly improved the store's operational efficiency by
+                        automating stock updates, generating instant PDF reports and receipts, and providing clear
+                        visibility into inventory levels.</p>
+                </div>
+                <div class="project-meta">
+                    <h3><i class="fas fa-info-circle"></i> Project Info</h3>
+                    <div class="meta-item">
+                        <span class="label">Role</span>
+                        <span class="value">Full Stack Developer</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="label">Type</span>
+                        <span class="value">Desktop Application</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="label">Status</span>
+                        <span class="value" style="color: var(--neon-green);">● In Production</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="label">Client</span>
+                        <span class="value">Refaccionaria MADAX</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="label">Industry</span>
+                        <span class="value">Auto Parts Retail</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tech Stack -->
+        <div class="section-block fade-up">
+            <h2>Tech <span>Stack</span></h2>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <i class="fa-brands fa-php"></i>
+                    <h4>PHP</h4>
+                    <p>Server-side logic</p>
+                </div>
+                <div class="tech-card">
+                    <i class="fa-brands fa-laravel"></i>
+                    <h4>Laravel</h4>
+                    <p>Backend framework</p>
+                </div>
+                <div class="tech-card">
+                    <i class="fas fa-database"></i>
+                    <h4>SQLite</h4>
+                    <p>Local database</p>
+                </div>
+                <div class="tech-card">
+                    <i class="fas fa-wind"></i>
+                    <h4>Tailwind CSS</h4>
+                    <p>UI styling</p>
+                </div>
+                <div class="tech-card">
+                    <i class="fas fa-atom"></i>
+                    <h4>NativePHP</h4>
+                    <p>Desktop packaging</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Features -->
+        <div class="section-block fade-up">
+            <h2>Key <span>Features</span></h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="icon"><i class="fas fa-user-shield"></i></div>
+                    <h4>Role-Based Access Control</h4>
+                    <p>Comprehensive permission system ensuring each employee accesses only the features relevant to
+                        their role, enhancing security and operational control.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon"><i class="fas fa-boxes-stacked"></i></div>
+                    <h4>Inventory Management</h4>
+                    <p>Real-time stock tracking with automatic updates on every sale. Low stock alerts and detailed
+                        product cataloging for efficient management.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon"><i class="fas fa-cash-register"></i></div>
+                    <h4>Sales Processing</h4>
+                    <p>Fast and intuitive sales interface with product search, quantity management, and automatic price
+                        calculations for quick checkout.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon"><i class="fas fa-file-pdf"></i></div>
+                    <h4>PDF Reports & Tickets</h4>
+                    <p>Automated generation of sales receipts, inventory reports, and financial summaries in
+                        professional PDF format.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screenshots -->
+        <div class="section-block fade-up">
+            <h2>Screenshots</h2>
+            <div class="screenshots-grid">
+                <div class="screenshot-item">
+                    <img src="../Images/POS-MADAX/Dashboard.png" alt="Dashboard View">
+                    <div class="caption"><i class="fas fa-desktop"></i> Dashboard overview</div>
+                </div>
+                <div class="screenshot-item">
+                    <img src="../Images/POS-MADAX/Inventario.png" alt="Inventory Management">
+                    <div class="caption"><i class="fas fa-boxes-stacked"></i> Inventory management</div>
+                </div>
+                <div class="screenshot-item">
+                    <img src="../Images/POS-MADAX/Ventas.png" alt="Sales Reports">
+                    <div class="caption"><i class="fas fa-chart-line"></i> Sales reports</div>
+                </div>
+                <div class="screenshot-item">
+                    <img src="../Images/POS-MADAX/Ver_venta.png" alt="Point of Sale">
+                    <div class="caption"><i class="fas fa-cash-register"></i> Point of Sale interface</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta-section fade-up">
+            <h2>Interested in working together?</h2>
+            <p>Feel free to reach out if you'd like to discuss a project or learn more about my work.</p>
+            <a href="../index.html#contact" class="btn">
+                <i class="fas fa-envelope"></i> Get in Touch
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Fade in on scroll
+        const fadeElements = document.querySelectorAll('.fade-up');
+        const fadeObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        fadeElements.forEach(el => fadeObserver.observe(el));
+
+        // Lightbox functionality
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const closeLightbox = document.getElementById('close-lightbox');
+        const screenshots = document.querySelectorAll('.screenshot-item img');
+
+        screenshots.forEach(img => {
+            img.addEventListener('click', () => {
+                lightboxImg.src = img.src;
+                lightbox.classList.add('active');
+            });
+        });
+
+        closeLightbox.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+        });
+
+        // Close when clicking outside the image
+        lightbox.addEventListener('click', (e) => {
+            if (e.target !== lightboxImg) {
+                lightbox.classList.remove('active');
+            }
+        });
+
+        // Close on ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                lightbox.classList.remove('active');
+            }
+        });
+    </script>
+
+</body>
+
+</html>
